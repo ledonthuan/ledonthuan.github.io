@@ -5,7 +5,7 @@ async function init() {
 
     // Initialize SVG
     const svg = d3.select("svg");
-    const g = svg.append("g").attr("transform","translate(100,100)");
+    const g = svg.append("g").attr("transform","translate(50,50)");
 
     // only get the world data
     const worldData = data.filter(d => d.country === 'World');
