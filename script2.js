@@ -32,6 +32,11 @@ async function init() {
         .attr("stroke-width", 1.5)
         .attr("d", line);
 
+    // Set up axes
+    const xAxis = d3.axisBottom(xScale);
+    const yAxis = d3.axisLeft(yScale);
+
+    
     // Add annotations, interactivity, etc. here
 }
 
