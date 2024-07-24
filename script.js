@@ -10,7 +10,7 @@ async function init() {
     const svg = d3.select("svg");
     const width = +svg.attr("width");
     const height = +svg.attr("height");
-    const margin = {top: 20, right: 30, bottom: 40, left: 50};
+    const margin = {top: 50, right: 50, bottom: 50, left: 50};
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
