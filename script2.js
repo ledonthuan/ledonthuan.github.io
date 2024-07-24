@@ -5,7 +5,7 @@ async function init() {
 
     // Initialize SVG
     const svg = d3.select("svg");
-    const g = svg.append("g").attr("transform","translate(50,50)");
+    const g = svg.append("g").attr("transform","translate(100,100)");
 
     // only get the world data
     const worldData = data.filter(d => d.country === 'World');
@@ -26,7 +26,7 @@ async function init() {
 
     // Draw the line
     g.append("path")
-        .datum(worldData)
+        .data(worldData)
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
