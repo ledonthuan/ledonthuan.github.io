@@ -35,8 +35,12 @@ async function init() {
     // Set up axes
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale);
-
     
+    // Append axes
+    g.append("g").call(yAxis);
+    g.append("g").call(xAxis)
+        .attr("transform", `translate(0,300)`);
+
     // Add annotations, interactivity, etc. here
 }
 
