@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,6 +16,31 @@
     <svg></svg>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="script.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Chart with Custom Time Range</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div id="controls">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" value="1970-01-01">
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" value="2020-01-01">
+
+        <button id="updateButton">Update Chart</button>
+    </div>
+
+    <svg width="600" height="400"></svg>
+
+    <script src="script2.js"></script>
 </body>
 </html>
 
