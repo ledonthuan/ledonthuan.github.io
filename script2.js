@@ -5,7 +5,7 @@ async function init() {
     // Parse the data
     data.forEach(d => {
         d.year = +d.year;  // Parse year as an integer
-        d.co2 = +d.co2;  // Ensure co2 is a number
+        d.co2 = +d.co2 * 1000000;  // Ensure co2 is a number
     });
 
     // Filter for the world data
