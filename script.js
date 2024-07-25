@@ -1,4 +1,4 @@
-async function init() { //bar chart
+async function init() {
     // Load the dataset
     const data = await d3.csv("owid-co2-data.csv");
 
@@ -54,11 +54,12 @@ async function init() { //bar chart
             d => d.country
         );
 
-        // Convert to an array and sort by CO2 emissions
+        // Convert to an array, sort by CO2 emissions, and take the top 15
         const sortedCountries = Array.from(countryData.entries())
             .sort((a, b) => b[1] - a[1])  // Sort descending by total CO2
             .slice(0, 15);  // Take the top 15 countries
 
+        // Extract the country names and emissions
         const countries = sortedCountries.map(d => d[0]);
         const emissions = sortedCountries.map(d => d[1]);
 
@@ -72,30 +73,30 @@ async function init() { //bar chart
 
         // Bind data
         const bars = g.selectAll(".bar")
-            .data(countries, d => d);
+            .data(sortedCountries, d => d[0]);
 
         // Enter
         bars.enter().append("rect")
             .attr("class", "bar")
-            .attr("x", d => xScale(d))
-            .attr("y", d => yScale(countryData.get(d)))
+            .attr("x", d => xScale(d[0]))
+            .attr("y", d => yScale(d[1]))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => innerHeight - yScale(countryData.get(d)))
-            .attr("fill", d => colorScale(d))
+            .attr("height", d => innerHeight - yScale(d[1]))
+            .attr("fill", d => colorScale(d[0]))
             .merge(bars)
             .transition()
             .duration(750)
-            .attr("x", d => xScale(d))
-            .attr("y", d => yScale(countryData.get(d)))
+            .attr("x", d => xScale(d[0]))
+            .attr("y", d => yScale(d[1]))
             .attr("width", xScale.bandwidth())
-            .attr("height", d => innerHeight - yScale(countryData.get(d)))
-            .attr("fill", d => colorScale(d));
+            .attr("height", d => innerHeight - yScale(d[1]))
+            .attr("fill", d => colorScale(d[0]));
 
         // Exit
         bars.exit().remove();
     }
 
-    // Add event listeners
+    // Add event listener to the button
     document.getElementById("updateButton").addEventListener("click", () => {
         const year = +document.getElementById("yearInput").value;
         updateChart(year);
