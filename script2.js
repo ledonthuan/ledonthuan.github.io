@@ -36,7 +36,7 @@ async function init() {
     // Set up axes
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale)
-        .tickFormat(d => formatYAxis(d / 1e6) + 'M');  // Convert to millions of tons
+        .tickFormat(d => formatYAxis(d / 1e9) + 'B');  // Convert to millions of tons
 
     // Append axes
     const xAxisGroup = g.append("g")
