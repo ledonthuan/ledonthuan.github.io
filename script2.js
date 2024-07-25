@@ -31,7 +31,8 @@ async function init() {
 
     // Set up axes
     const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3.axisLeft(yScale);
+    const yAxis = d3.axisLeft(yScale)
+        .tickFormat(d3.format(".2s"));
 
     // Append axes
     const xAxisGroup = g.append("g")
