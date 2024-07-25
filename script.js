@@ -102,16 +102,22 @@ async function init() {
     // Add event listeners to buttons
     document.getElementById("decrementButton").addEventListener("click", () => {
         const currentYear = +document.getElementById("year").value;
-        const newYear = Math.max(currentYear - 1, 1900);
+        const newYear = Math.max(currentYear - 1, 1850);
         document.getElementById("year").value = newYear;
         updateChart(newYear);
     });
 
     document.getElementById("incrementButton").addEventListener("click", () => {
         const currentYear = +document.getElementById("year").value;
-        const newYear = Math.min(currentYear + 1, 2024);
+        const newYear = Math.min(currentYear + 1, 2022);
         document.getElementById("year").value = newYear;
         updateChart(newYear);
+    });
+
+    // Add event listener to the input field
+    document.getElementById("year").addEventListener("change", () => {
+        const inputYear = +document.getElementById("year").value;
+        updateChart(inputYear);
     });
 
     // Initial chart render
@@ -122,16 +128,18 @@ async function init() {
 // Initialize the chart
 init();
 
-
 // async function init() {
 //     // Load the dataset
 //     const data = await d3.csv("owid-co2-data.csv");
 
-//     // Parse the data
-//     data.forEach(d => {
-//         d.year = +d.year;
-//         d.co2 = +d.co2;
-//     });
+//     // Parse the data and filter out rows without a country code
+//     const filteredData = data
+//         .map(d => {
+//             d.year = +d.year;
+//             d.co2 = +d.co2;
+//             return d;
+//         })
+//         .filter(d => d.iso_code);  // Keep only rows with a country code
 
 //     // Initialize SVG dimensions
 //     const svg = d3.select("svg");
@@ -170,11 +178,11 @@ init();
 //     // Function to update the chart
 //     function updateChart(year) {
 //         // Filter data for the selected year
-//         const filteredData = data.filter(d => d.year === year);
+//         const yearData = filteredData.filter(d => d.year === year);
 
 //         // Aggregate CO2 emissions by country
 //         const countryData = d3.rollup(
-//             filteredData,
+//             yearData,
 //             v => d3.sum(v, d => d.co2),
 //             d => d.country
 //         );
