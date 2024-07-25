@@ -15,7 +15,7 @@ async function init() {
     const svg = d3.select("svg");
     const width = +svg.attr("width") || 600;
     const height = +svg.attr("height") || 400;
-    const margin = { top: 20, right: 30, bottom: 40, left: 50 };
+    const margin = { top: 20, right: 30, bottom: 40, left: 70 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
