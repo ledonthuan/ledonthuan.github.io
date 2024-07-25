@@ -4,7 +4,7 @@ async function init() {
 
     // Parse the data
     data.forEach(d => {
-        d.year = new Date(d.year);
+        d.year = +d.year;  // Parse year as an integer
         d.co2 = +d.co2;
     });
 
@@ -40,7 +40,7 @@ async function init() {
 
     // Create the line generator
     const line = d3.line()
-        .x(d => xScale(d.year))
+        .x(d => xScale(new Date(d.year, 0, 1)))  // Use only the year for the x value
         .y(d => yScale(d.co2));
 
     const path = g.append("path")
@@ -49,12 +49,12 @@ async function init() {
         .attr("stroke-width", 1.5);
 
     function updateChart() {
-        const startDate = new Date(document.getElementById("startDate").value);
-        const endDate = new Date(document.getElementById("endDate").value);
+        const startYear = +document.getElementById("startDate").value;
+        const endYear = +document.getElementById("endDate").value;
 
-        const filteredData = worldData.filter(d => d.year >= startDate && d.year <= endDate);
+        const filteredData = worldData.filter(d => d.year >= startYear && d.year <= endYear);
 
-        xScale.domain(d3.extent(filteredData, d => d.year));
+        xScale.domain(d3.extent(filteredData, d => new Date(d.year, 0, 1)));
         yScale.domain([0, d3.max(filteredData, d => d.co2)]);
 
         xAxisGroup.call(xAxis);
@@ -71,3 +71,4 @@ async function init() {
 }
 
 init();
+
