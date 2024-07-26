@@ -105,7 +105,7 @@ async function init() {
     // Add event listeners to buttons
     document.getElementById("decrementButton").addEventListener("click", () => {
         const currentYear = +document.getElementById("year").value;
-        const newYear = Math.max(currentYear - 1, 1850);
+        const newYear = Math.max(currentYear - 1, 1850);  // Updated minimum year
         document.getElementById("year").value = newYear;
         updateChart(newYear);
     });
