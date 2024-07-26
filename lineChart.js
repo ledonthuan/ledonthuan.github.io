@@ -106,6 +106,10 @@ async function initLineChart() {
 
         const makeAnnotations = d3.annotation().annotations(annotations);
 
+        // Clear previous annotations
+        svg.select(".annotation-group").remove();
+
+        // Append new annotations
         svg.append("g")
             .attr("class", "annotation-group")
             .call(makeAnnotations);
@@ -117,6 +121,7 @@ async function initLineChart() {
 }
 
 document.addEventListener('DOMContentLoaded', initLineChart);
+
 
 
 
