@@ -47,10 +47,17 @@
     </div>
 
     <div id="barChartControls" style="display: none;">
-        <label for="year (1750 - 2022)">Year:</label>
+        <label for="year(1750-2022)">Year:</label>
         <input type="number" id="year" value="1750" min="1750" max="2022">
         <button id="decrementButton">-1 Year</button>
         <button id="incrementButton">+1 Year</button>
+    </div>
+
+    <div id="scatterPlotControls" style="display: none;">
+        <label for="Year (1820-2022)">Year:</label>
+        <input type="number" id="scatterYear" value="1820" min="1750" max="2022">
+        <button id="scatterDecrementButton">-1 Year</button>
+        <button id="scatterIncrementButton">+1 Year</button>
     </div>
 
     <div id="lineChart" class="chart active">
@@ -85,9 +92,15 @@
             if (chartId === 'lineChart') {
                 document.getElementById('lineChartControls').style.display = 'block';
                 document.getElementById('barChartControls').style.display = 'none';
-            } else {
+                document.getElementById('scatterPlotControls').style.display = 'none';
+            } else if (chartId === 'barChart') {
                 document.getElementById('lineChartControls').style.display = 'none';
                 document.getElementById('barChartControls').style.display = 'block';
+                document.getElementById('scatterPlotControls').style.display = 'none';
+            } else if (chartId === 'scatterPlot') {
+                document.getElementById('lineChartControls').style.display = 'none';
+                document.getElementById('barChartControls').style.display = 'none';
+                document.getElementById('scatterPlotControls').style.display = 'block';
             }
         }
 
@@ -108,6 +121,20 @@
         });
 
         document.getElementById('year').addEventListener('change', updateCharts);
+
+        document.getElementById('scatterDecrementButton').addEventListener('click', () => {
+            const scatterYearInput = document.getElementById('scatterYear');
+            scatterYearInput.value = Math.max(+scatterYearInput.value - 1, +scatterYearInput.min);
+            updateCharts();
+        });
+
+        document.getElementById('scatterIncrementButton').addEventListener('click', () => {
+            const scatterYearInput = document.getElementById('scatterYear');
+            scatterYearInput.value = Math.min(+scatterYearInput.value + 1, +scatterYearInput.max);
+            updateCharts();
+        });
+
+        document.getElementById('scatterYear').addEventListener('change', updateCharts);
 
         document.getElementById('updateLineChartButton').addEventListener('click', () => {
             const event = new Event('update');
