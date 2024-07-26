@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CO₂ Emissions Data Visualization</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3-annotation@3.0.0/dist/d3-annotation.min.js"></script>
     <style>
         svg {
             width: 800px;
@@ -23,32 +24,15 @@
         #chart-buttons {
             margin-top: 20px;
         }
-        .tooltip {
-            position: absolute;
-            text-align: center;
-            width: auto;
-            height: auto;
-            padding: 5px;
-            font: 12px sans-serif;
-            background: lightsteelblue;
-            border: 0px;
-            border-radius: 8px;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
-    <div id="lineChartControls">
+    <div id="controls">
         <label for="startYear">Start Year:</label>
         <input type="number" id="startYear" value="1850" min="1850" max="2022">
         <label for="endYear">End Year:</label>
         <input type="number" id="endYear" value="2022" min="1850" max="2022">
-        <button id="updateLineChartButton">Update Line Chart</button>
-    </div>
-
-    <div id="barChartControls" style="display: none;">
-        <label for="year">Year:</label>
-        <input type="number" id="year" value="2020" min="1850" max="2022">
+        <button id="updateButton">Update</button>
         <button id="decrementButton">-1 Year</button>
         <button id="incrementButton">+1 Year</button>
     </div>
@@ -75,47 +59,41 @@
     <script src="barChart.js"></script>
     <script src="scatterPlot.js"></script>
     <script>
+        // Function to show the selected chart
         function showChart(chartId) {
             document.querySelectorAll('.chart').forEach(chart => {
                 chart.classList.remove('active');
             });
             document.getElementById(chartId).classList.add('active');
-
-            // Show/hide appropriate controls
-            if (chartId === 'lineChart') {
-                document.getElementById('lineChartControls').style.display = 'block';
-                document.getElementById('barChartControls').style.display = 'none';
-            } else {
-                document.getElementById('lineChartControls').style.display = 'none';
-                document.getElementById('barChartControls').style.display = 'block';
-            }
         }
 
+        // Add event listeners to buttons
         document.getElementById('showLineChart').addEventListener('click', () => showChart('lineChart'));
         document.getElementById('showBarChart').addEventListener('click', () => showChart('barChart'));
         document.getElementById('showScatterPlot').addEventListener('click', () => showChart('scatterPlot'));
 
+        // Add event listeners for increment and decrement buttons
         document.getElementById('decrementButton').addEventListener('click', () => {
-            const yearInput = document.getElementById('year');
+            const yearInput = document.getElementById('startYear');
             yearInput.value = Math.max(+yearInput.value - 1, +yearInput.min);
             updateCharts();
         });
 
         document.getElementById('incrementButton').addEventListener('click', () => {
-            const yearInput = document.getElementById('year');
+            const yearInput = document.getElementById('startYear');
             yearInput.value = Math.min(+yearInput.value + 1, +yearInput.max);
             updateCharts();
         });
 
-        document.getElementById('year').addEventListener('change', updateCharts);
+        document.getElementById('updateButton').addEventListener('click', updateCharts);
 
-        document.getElementById('updateLineChartButton').addEventListener('click', () => {
-            const event = new Event('update');
-            document.getElementById('lineChart').dispatchEvent(event);
-        });
+        document.getElementById('startYear').addEventListener('change', updateCharts);
+        document.getElementById('endYear').addEventListener('change', updateCharts);
 
+        // Update all charts based on the selected year range
         function updateCharts() {
             const event = new Event('update');
+            document.getElementById('lineChart').dispatchEvent(event);
             document.getElementById('barChart').dispatchEvent(event);
             document.getElementById('scatterPlot').dispatchEvent(event);
         }
