@@ -8,7 +8,7 @@
     <style>
         svg {
             width: 800px;
-            height: 650px;
+            height: 600px;
             border: 1px solid black;
         }
         .chart {
@@ -31,6 +31,13 @@
         <input type="number" id="year" value="2020" min="1850" max="2022">
         <button id="decrementButton">-1 Year</button>
         <button id="incrementButton">+1 Year</button>
+    </div>
+    <div id="lineChartControls">
+        <label for="startYear">Start Year:</label>
+        <input type="number" id="startYear" value="1850" min="1850" max="2022">
+        <label for="endYear">End Year:</label>
+        <input type="number" id="endYear" value="2022" min="1850" max="2022">
+        <button id="updateLineChartButton">Update Line Chart</button>
     </div>
 
     <div id="lineChart" class="chart active">
@@ -55,22 +62,17 @@
     <script src="barChart.js"></script>
     <script src="scatterPlot.js"></script>
     <script>
-        // Function to show the selected chart
         function showChart(chartId) {
-            // Hide all charts
             document.querySelectorAll('.chart').forEach(chart => {
                 chart.classList.remove('active');
             });
-            // Show the selected chart
             document.getElementById(chartId).classList.add('active');
         }
 
-        // Add event listeners to buttons
         document.getElementById('showLineChart').addEventListener('click', () => showChart('lineChart'));
         document.getElementById('showBarChart').addEventListener('click', () => showChart('barChart'));
         document.getElementById('showScatterPlot').addEventListener('click', () => showChart('scatterPlot'));
 
-        // Add event listeners for increment and decrement buttons
         document.getElementById('decrementButton').addEventListener('click', () => {
             const yearInput = document.getElementById('year');
             yearInput.value = Math.max(+yearInput.value - 1, +yearInput.min);
@@ -84,8 +86,8 @@
         });
 
         document.getElementById('year').addEventListener('change', updateCharts);
+        document.getElementById('updateLineChartButton').addEventListener('click', updateCharts);
 
-        // Update all charts based on the selected year
         function updateCharts() {
             const event = new Event('update');
             document.getElementById('lineChart').dispatchEvent(event);
@@ -95,61 +97,3 @@
     </script>
 </body>
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html lang="en"> 
-<head>
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3 Chart with Custom Time Range</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-</head>
-<body>
-    <div id="controls">
-        <label for="startDate">Start Year(min 1850):</label>
-        <input type="number" id="startDate" value="1850" min="1850" max="2022">
-
-        <label for="endDate">End Year(max 2022):</label>
-        <input type="number" id="endDate" value="2022" min="1850" max="2022">
-
-        <button id="updateButton">Update Chart</button>
-    </div>
-
-    <svg width="600" height="400"></svg>
-
-    <script src="script2.js"></script>
-</body>
-</html> -->
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CO₂ Emissions by Country</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        svg {
-            width: 800px;
-            height: 600px;
-            border: 1px solid black;
-        }
-    </style>
-</head>
-<body>
-    <div id="controls">
-        <label for="year">Year:</label>
-        <input type="number" id="year" value="1850" min="1850" max="2022">
-
-        <button id="decrementButton">-1 Year</button>
-        <button id="incrementButton">+1 Year</button>
-    </div>
-
-    <svg></svg>
-
-    <script src="script.js"></script>
-</body>
-</html>
-
- -->
