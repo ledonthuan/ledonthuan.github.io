@@ -29,7 +29,7 @@ async function initScatterPlot() {
     }));
 
     function updateScatterPlot() {
-        const year = +document.getElementById("year").value;
+        const year = +document.getElementById("scatterYear").value;
         const yearData = data.filter(d => d.year === year && d.iso_code);
 
         xScale.domain([0, d3.max(yearData, d => d.gdp)]).nice();
