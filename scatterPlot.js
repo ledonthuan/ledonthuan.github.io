@@ -35,7 +35,10 @@ async function initScatterPlot() {
         xScale.domain([0, d3.max(yearData, d => d.gdp)]).nice();
         yScale.domain([0, d3.max(yearData, d => d.co2)]).nice();
 
-        xAxisGroup.call(xAxis);
+        xAxisGroup.call(xAxis)
+            .selectAll("text")
+            .attr("transform", "rotate(-45)")
+            .style("text-anchor", "end");
         yAxisGroup.call(yAxis);
 
         const circles = g.selectAll("circle").data(yearData);
