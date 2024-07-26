@@ -64,39 +64,6 @@ async function initScatterPlot() {
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
-
-        const legend = g.selectAll(".legend")
-            .data(colorScale.domain())
-            .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", (d, i) => `translate(0,${i * 20})`);
-
-        legend.append("rect")
-            .attr("x", innerWidth - 18)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", colorScale);
-
-        legend.append("text")
-            .attr("x", innerWidth - 24)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "end")
-            .text(d => d);
-
-        // Add trend line
-        const xMean = d3.mean(yearData, d => d.gdp);
-        const yMean = d3.mean(yearData, d => d.co2);
-        const xStdDev = d3.deviation(yearData, d => d.gdp);
-        const yStdDev = d3.deviation(yearData, d => d.co2);
-        
-        const line = g.append("line")
-            .attr("x1", xScale(xMean - xStdDev))
-            .attr("y1", yScale(yMean - yStdDev))
-            .attr("x2", xScale(xMean + xStdDev))
-            .attr("y2", yScale(yMean + yStdDev))
-            .attr("stroke", "red")
-            .attr("stroke-width", 2);
     }
 
     document.getElementById("scatterPlot").addEventListener('update', updateScatterPlot);
