@@ -8,7 +8,7 @@ async function initLineChart() {
 
     const g = svg.append("g").attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    const xScale = d3.scaleLinear().range([0, innerWidth]);
+    const xScale = d3.scaleTime().range([0, innerWidth]);
     const yScale = d3.scaleLinear().range([innerHeight, 0]);
 
     const xAxis = d3.axisBottom(xScale);
@@ -18,14 +18,10 @@ async function initLineChart() {
     const yAxisGroup = g.append("g");
 
     const line = d3.line()
-        .x(d => xScale(d.year))
+        .x(d => xScale(new Date(d.year, 0, 1)))
         .y(d => yScale(d.co2));
 
-    const data = await d3.csv("owid-co2-data.csv", d => ({
-        year: +d.year,
-        co2: +d.co2
-    }));
-
+    // Define annotations
     const annotationsData = [
         {
             note: { label: "Industrial Revolution", title: "1760" },
@@ -54,12 +50,12 @@ async function initLineChart() {
     ];
 
     function updateAnnotations() {
-        const annotations = annotationsData.filter(d => d.data.year >= xScale.domain()[0] && d.data.year <= xScale.domain()[1]);
+        const annotations = annotationsData.filter(d => xScale(new Date(d.data.year, 0, 1)) >= 0 && xScale(new Date(d.data.year, 0, 1)) <= innerWidth);
 
         const makeAnnotations = d3.annotation()
             .type(d3.annotationLabel)
             .accessors({
-                x: d => xScale(d.year),
+                x: d => xScale(new Date(d.year, 0, 1)),
                 y: d => yScale(d.co2)
             })
             .annotations(annotations);
@@ -70,29 +66,46 @@ async function initLineChart() {
             .call(makeAnnotations);
     }
 
-    function updateLineChart() {
+    async function updateLineChart() {
+        // Load the dataset
+        const data = await d3.csv("owid-co2-data.csv");
+
+        // Parse the data
+        data.forEach(d => {
+            d.year = +d.year;  // Parse year as an integer
+            d.co2 = +d.co2;   // Ensure co2 is a number
+        });
+
+        // Filter for the world data
+        const worldData = data.filter(d => d.country === 'World' && d.co2 !== null);
+
+        // Get the selected date range
         const startYear = +document.getElementById("startYear").value;
         const endYear = +document.getElementById("endYear").value;
 
-        const filteredData = data.filter(d => d.year >= startYear && d.year <= endYear);
+        // Filter data based on selected range
+        const filteredData = worldData.filter(d => d.year >= startYear && d.year <= endYear);
 
-        xScale.domain([startYear, endYear]).nice();
+        // Update scales
+        xScale.domain([new Date(startYear, 0, 1), new Date(endYear, 0, 1)]).nice();
         yScale.domain([0, d3.max(filteredData, d => d.co2)]).nice();
 
+        // Update axes
         xAxisGroup.call(xAxis);
         yAxisGroup.call(yAxis);
 
-        const path = g.selectAll(".line").data([filteredData]);
+        // Clear previous content
+        g.selectAll("*").remove();
 
-        path.enter().append("path")
-            .attr("class", "line")
-            .merge(path)
-            .attr("d", line)
+        // Draw the line
+        g.append("path")
+            .datum(filteredData)
             .attr("fill", "none")
-            .attr("stroke", "steelblue");
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
 
-        path.exit().remove();
-
+        // Update annotations
         updateAnnotations();
     }
 
