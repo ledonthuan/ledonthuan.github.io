@@ -191,53 +191,48 @@ async function updateLineChart() {
         .attr("x", margin.left + innerWidth / 2)
         .attr("y", margin.top / 2)
         .attr("font-size", "24px")
-        .text("CO₂ Emissions Over Time changed");
+        .text("CO₂ Emissions Over Time");
 
-    // Define annotation type
-    const type = d3.annotationCalloutElbow;
-
-    // Add annotations
+    // Define annotations
     const annotations = [
         {
             note: {
-                label: "Industrial Revolution begins",
+                label: "Start of the Industrial Revolution",
                 title: "1760"
             },
             data: { year: 1760, co2: filteredData.find(d => d.year === 1760)?.co2 },
-            dx: 30, dy: -30
+            dy: 137,
+            dx: 162
         },
         {
             note: {
-                label: "World War II ends",
+                label: "End of World War II",
                 title: "1945"
             },
             data: { year: 1945, co2: filteredData.find(d => d.year === 1945)?.co2 },
-            dx: 30, dy: -30
+            dy: 137,
+            dx: 162
         },
         {
             note: {
-                label: "Kyoto Protocol signed",
+                label: "Kyoto Protocol Signed",
                 title: "1997"
             },
             data: { year: 1997, co2: filteredData.find(d => d.year === 1997)?.co2 },
-            dx: 30, dy: -30
+            dy: 137,
+            dx: 162
         }
     ];
 
-    const parseTime = d3.timeParse("%Y");
-    const timeFormat = d3.timeFormat("%Y");
+    const type = d3.annotationCalloutElbow;
 
     const makeAnnotations = d3.annotation()
         .editMode(true)
         .notePadding(15)
         .type(type)
         .accessors({
-            x: d => xScale(parseTime(d.year.toString())),
+            x: d => xScale(new Date(d.year, 0, 1)),
             y: d => yScale(d.co2)
-        })
-        .accessorsInverse({
-            year: d => timeFormat(xScale.invert(d.x)),
-            co2: d => yScale.invert(d.y)
         })
         .annotations(annotations.map(d => ({
             note: d.note,
@@ -247,7 +242,7 @@ async function updateLineChart() {
             dy: d.dy
         })));
 
-    g.append("g")
+    svg.append("g")
         .attr("class", "annotation-group")
         .call(makeAnnotations);
 }
