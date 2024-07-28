@@ -190,7 +190,7 @@ async function updateLineChart() {
         .attr("x", margin.left + innerWidth / 2)
         .attr("y", margin.top / 2)
         .attr("font-size", "24px")
-        .text("CO₂ Emissions Over Time changed");
+        .text("CO₂ Emissions Over Time");
 
     // Define annotations
     const annotations = [
@@ -209,8 +209,8 @@ async function updateLineChart() {
                 title: "1945"
             },
             data: { year: 1945, co2: filteredData.find(d => d.year === 1945)?.co2 },
-            dy: -30,
-            dx: 30
+            dy: 30,
+            dx: -30
         },
         {
             note: {
@@ -218,8 +218,8 @@ async function updateLineChart() {
                 title: "1997"
             },
             data: { year: 1997, co2: filteredData.find(d => d.year === 1997)?.co2 },
-            dy: -30,
-            dx: 30
+            dy: 30,
+            dx: -30
         }
     ];
 
