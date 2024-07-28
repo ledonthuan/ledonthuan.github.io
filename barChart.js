@@ -28,7 +28,7 @@ async function initBarChart() {
     // Add x-axis label
     svg.append("text")
         .attr("x", width / 2)
-        .attr("y", height - margin.bottom / 4 + 10)
+        .attr("y", height - margin.bottom / 4 + 20)
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text("Country");
