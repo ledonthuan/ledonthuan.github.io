@@ -191,40 +191,45 @@ async function updateLineChart() {
         .attr("x", margin.left + innerWidth / 2)
         .attr("y", margin.top / 2)
         .attr("font-size", "24px")
-        .text("CO₂ Emissions Over Time changed");
+        .text("CO₂ Emissions Over Time");
 
-    // Define annotations
+    // Add annotations
+    const type = d3.annotationLabel;
     const annotations = [
         {
             note: {
-                label: "Start of the Industrial Revolution",
+                label: "Industrial Revolution begins",
+                bgPadding: 20,
                 title: "1760"
             },
             data: { year: 1760, co2: filteredData.find(d => d.year === 1760)?.co2 },
-            dy: 137,
-            dx: 162
+            className: "show-bg",
+            dy: -30,
+            dx: 30
         },
         {
             note: {
-                label: "End of World War II",
+                label: "World War II ends",
+                bgPadding: 20,
                 title: "1945"
             },
             data: { year: 1945, co2: filteredData.find(d => d.year === 1945)?.co2 },
-            dy: 137,
-            dx: 162
+            className: "show-bg",
+            dy: -30,
+            dx: 30
         },
         {
             note: {
-                label: "Kyoto Protocol Signed",
+                label: "Kyoto Protocol signed",
+                bgPadding: 20,
                 title: "1997"
             },
             data: { year: 1997, co2: filteredData.find(d => d.year === 1997)?.co2 },
-            dy: 137,
-            dx: 162
+            className: "show-bg",
+            dy: -30,
+            dx: 30
         }
     ];
-
-    const type = d3.annotationLabel;
 
     const makeAnnotations = d3.annotation()
         .editMode(true)
@@ -234,18 +239,24 @@ async function updateLineChart() {
             x: d => xScale(new Date(d.year, 0, 1)),
             y: d => yScale(d.co2)
         })
+        .accessorsInverse({
+            year: d => d3.timeFormat("%Y")(xScale.invert(d.x)),
+            co2: d => yScale.invert(d.y)
+        })
         .annotations(annotations.map(d => ({
             note: d.note,
             x: xScale(new Date(d.data.year, 0, 1)),
             y: yScale(d.data.co2),
             dx: d.dx,
-            dy: d.dy
+            dy: d.dy,
+            className: d.className
         })));
 
-    svg.append("g")
+    g.append("g")
         .attr("class", "annotation-group")
         .call(makeAnnotations);
 }
 
 // Initial update on page load
 updateLineChart();
+
