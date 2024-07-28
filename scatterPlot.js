@@ -25,7 +25,7 @@ async function initScatterPlot() {
         .attr("y", margin.top / 2)
         .attr("text-anchor", "middle")
         .style("font-size", "20px")
-        .text("CO₂ Emissions vs. GDP Scatter Plot");
+        .text("CO₂ Emissions vs. GDP Scatter Plot (hover over each country for more info)");
 
     // Add x-axis label
     svg.append("text")
