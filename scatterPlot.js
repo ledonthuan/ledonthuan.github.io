@@ -150,22 +150,24 @@ async function initScatterPlot() {
         .style("font-size", "16px")
         .text("CO₂ Emissions (MtCO₂)");
 
-    const data = await d3.csv("owid-co2-data.csv", d => ({
-        year: +d.year,
-        co2: +d.co2,
-        gdp: +d.gdp,
-        country: d.country,
-        iso_code: d.iso_code,
-        population: +d.population
-    }));
-
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+    // Load and parse the data
+    const data = await d3.csv("owid-co2-data.csv", d => {
+        return {
+            year: +d.year,
+            co2: +d.co2,
+            gdp: +d.gdp,
+            country: d.country,
+            iso_code: d.iso_code,
+            population: +d.population
+        };
+    });
 
     function updateScatterPlot() {
         const year = +document.getElementById("scatterYear").value;
         const yearData = data.filter(d => d.year === year && d.iso_code);
+
+        // Check if the data is correctly filtered and parsed
+        console.log("Year Data:", yearData);
 
         xScale.domain([0, d3.max(yearData, d => d.gdp)]).nice();
         yScale.domain([0, d3.max(yearData, d => d.co2)]).nice();
@@ -186,18 +188,24 @@ async function initScatterPlot() {
             .attr("fill", d => colorScale(d.country))
             .attr("opacity", 0.7)
             .on("mouseover", function(event, d) {
+                // Log data to see if properties are defined
+                console.log("Hovered Data:", d.country);
                 d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
                 tooltip.transition().duration(200).style("opacity", .9);
                 tooltip.html(`Country: ${d.country}<br/>CO₂: ${d.co2}<br/>GDP: ${d.gdp}<br/>Population: ${d.population}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
-            .on("mouseout", function(d) {
+            .on("mouseout", function() {
                 d3.select(this).attr("stroke", null);
                 tooltip.transition().duration(500).style("opacity", 0);
             });
 
         circles.exit().remove();
+
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
     }
 
     // Register event listener for the 'update' event on the scatter plot container
@@ -209,7 +217,5 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
-
-
 
 
