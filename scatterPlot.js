@@ -108,7 +108,7 @@ async function initScatterPlot() {
     const svg = d3.select("#scatterPlot svg");
     const width = +svg.attr("width") || 800;
     const height = +svg.attr("height") || 600;
-    const margin = { top: 50, right: 30, bottom: 80, left: 70 };
+    const margin = { top: 20, right: 30, bottom: 40, left: 70 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -125,31 +125,6 @@ async function initScatterPlot() {
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-    // Add title
-    svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", margin.top / 2)
-        .attr("text-anchor", "middle")
-        .style("font-size", "20px")
-        .text("CO₂ Emissions vs. GDP Scatter Plot (hover over each country for more info)");
-
-    // Add x-axis label
-    svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", height - margin.bottom / 4 + 20)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text("GDP");
-
-    // Add y-axis label
-    svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -height / 2)
-        .attr("y", margin.left / 4)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text("CO₂ Emissions (MtCO₂)");
-
     const data = await d3.csv("owid-co2-data.csv", d => ({
         year: +d.year,
         co2: +d.co2,
@@ -158,10 +133,6 @@ async function initScatterPlot() {
         iso_code: d.iso_code,
         population: +d.population
     }));
-
-    const tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
 
     function updateScatterPlot() {
         const year = +document.getElementById("scatterYear").value;
@@ -198,6 +169,10 @@ async function initScatterPlot() {
             });
 
         circles.exit().remove();
+
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
     }
 
     // Register event listener for the 'update' event on the scatter plot container
@@ -209,3 +184,4 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
+
