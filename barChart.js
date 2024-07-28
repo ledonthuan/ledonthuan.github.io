@@ -23,7 +23,7 @@ async function initBarChart() {
         .attr("y", margin.top / 2)
         .attr("text-anchor", "middle")
         .style("font-size", "20px")
-        .text("Top 15 CO₂ Emitting Countries");
+        .text("Top 15 CO₂ Emitting Countries (hover for tooltip)");
 
     // Add x-axis label
     svg.append("text")
