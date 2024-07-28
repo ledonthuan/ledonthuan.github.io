@@ -189,7 +189,7 @@ async function initScatterPlot() {
                 d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
                 console.log("Hover data:", d);  // Log the hovered data point
                 tooltip.transition().duration(200).style("opacity", .9);
-                tooltip.html(`Country: ${d.country}<br/>CO₂: ${d.co2}<br/>GDP: ${d.gdp}<br/>Population: ${d.population}`)
+                tooltip.html("Country: " + d.country + "<br/>CO₂: " + d.co2 + "<br/>GDP: " + d.gdp + "<br/>Population: " + d.population)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
@@ -214,6 +214,7 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
+
 
 
 
