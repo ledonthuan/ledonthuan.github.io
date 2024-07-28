@@ -226,7 +226,7 @@ async function updateLineChart() {
     const type = d3.annotationLabel;
 
     const makeAnnotations = d3.annotation()
-        .editMode(true)
+        .editMode(false)
         .notePadding(15)
         .type(type)
         .accessors({
