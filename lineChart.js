@@ -97,7 +97,6 @@
 // // Initial update on page load
 // updateLineChart();
 
-
 document.getElementById('lineChart').addEventListener('update', updateLineChart);
 
 async function updateLineChart() {
@@ -201,8 +200,8 @@ async function updateLineChart() {
                 title: "1760"
             },
             data: { year: 1760, co2: filteredData.find(d => d.year === 1760)?.co2 },
-            dy: 137,
-            dx: 162
+            dy: -30,
+            dx: 30
         },
         {
             note: {
@@ -210,8 +209,8 @@ async function updateLineChart() {
                 title: "1945"
             },
             data: { year: 1945, co2: filteredData.find(d => d.year === 1945)?.co2 },
-            dy: 137,
-            dx: 162
+            dy: -30,
+            dx: 30
         },
         {
             note: {
@@ -219,8 +218,8 @@ async function updateLineChart() {
                 title: "1997"
             },
             data: { year: 1997, co2: filteredData.find(d => d.year === 1997)?.co2 },
-            dy: 137,
-            dx: 162
+            dy: -30,
+            dx: 30
         }
     ];
 
@@ -249,3 +248,5 @@ async function updateLineChart() {
 
 // Initial update on page load
 updateLineChart();
+
+
