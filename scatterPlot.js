@@ -108,7 +108,7 @@ async function initScatterPlot() {
     const svg = d3.select("#scatterPlot svg");
     const width = +svg.attr("width") || 800;
     const height = +svg.attr("height") || 600;
-    const margin = { top: 20, right: 30, bottom: 40, left: 70 };
+    const margin = { top: 50, right: 30, bottom: 80, left: 70 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -125,18 +125,49 @@ async function initScatterPlot() {
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const data = await d3.csv("owid-co2-data.csv", d => ({
-        year: +d.year,
-        co2: +d.co2,
-        gdp: +d.gdp,
-        country: d.country,
-        iso_code: d.iso_code,
-        population: +d.population
-    }));
+    // Add title
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", margin.top / 2)
+        .attr("text-anchor", "middle")
+        .style("font-size", "20px")
+        .text("CO₂ Emissions vs. GDP Scatter Plot (hover over each country for more info)");
+
+    // Add x-axis label
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height - margin.bottom / 4 + 20)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("GDP");
+
+    // Add y-axis label
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -height / 2)
+        .attr("y", margin.left / 4)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("CO₂ Emissions (MtCO₂)");
+
+    // Load and parse the data
+    const data = await d3.csv("owid-co2-data.csv", d => {
+        return {
+            year: +d.year,
+            co2: +d.co2,
+            gdp: +d.gdp,
+            country: d.country,
+            iso_code: d.iso_code,
+            population: +d.population
+        };
+    });
 
     function updateScatterPlot() {
         const year = +document.getElementById("scatterYear").value;
         const yearData = data.filter(d => d.year === year && d.iso_code);
+
+        // Check if the data is correctly filtered and parsed
+        console.log("Year Data:", yearData);
 
         xScale.domain([0, d3.max(yearData, d => d.gdp)]).nice();
         yScale.domain([0, d3.max(yearData, d => d.co2)]).nice();
@@ -157,13 +188,15 @@ async function initScatterPlot() {
             .attr("fill", d => colorScale(d.country))
             .attr("opacity", 0.7)
             .on("mouseover", function(event, d) {
+                // Log data to see if properties are defined
+                console.log("Hovered Data:", d);
                 d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
                 tooltip.transition().duration(200).style("opacity", .9);
                 tooltip.html(`Country: ${d.country}<br/>CO₂: ${d.co2}<br/>GDP: ${d.gdp}<br/>Population: ${d.population}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
-            .on("mouseout", function(d) {
+            .on("mouseout", function() {
                 d3.select(this).attr("stroke", null);
                 tooltip.transition().duration(500).style("opacity", 0);
             });
@@ -184,4 +217,5 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
+
 
