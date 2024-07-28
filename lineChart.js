@@ -241,7 +241,7 @@ async function updateLineChart() {
             dy: d.dy
         })));
 
-    svg.append("g")
+    g.append("g")
         .attr("class", "annotation-group")
         .call(makeAnnotations);
 }
