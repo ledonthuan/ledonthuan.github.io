@@ -28,7 +28,7 @@ async function initBarChart() {
     // Add x-axis label
     svg.append("text")
         .attr("x", width / 2)
-        .attr("y", height - margin.bottom / 4)
+        .attr("y", height - margin.bottom / 4 + 10)
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text("Country");
@@ -37,7 +37,7 @@ async function initBarChart() {
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("x", -height / 2)
-        .attr("y", margin.left / 4  + 10)
+        .attr("y", margin.left / 4)
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text("CO₂ Emissions (MtCO₂)");
