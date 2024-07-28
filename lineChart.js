@@ -97,6 +97,7 @@
 // // Initial update on page load
 // updateLineChart();
 
+
 document.getElementById('lineChart').addEventListener('update', updateLineChart);
 
 async function updateLineChart() {
@@ -192,26 +193,52 @@ async function updateLineChart() {
         .attr("font-size", "24px")
         .text("CO₂ Emissions Over Time");
 
+    // Define annotation type
+    const type = d3.annotationCalloutElbow;
+
     // Add annotations
     const annotations = [
         {
-            note: { label: "Industrial Revolution begins", title: "1760" },
+            note: {
+                label: "Industrial Revolution begins",
+                title: "1760"
+            },
             data: { year: 1760, co2: filteredData.find(d => d.year === 1760)?.co2 },
             dx: 30, dy: -30
         },
         {
-            note: { label: "World War II ends", title: "1945" },
+            note: {
+                label: "World War II ends",
+                title: "1945"
+            },
             data: { year: 1945, co2: filteredData.find(d => d.year === 1945)?.co2 },
             dx: 30, dy: -30
         },
         {
-            note: { label: "Kyoto Protocol signed", title: "1997" },
+            note: {
+                label: "Kyoto Protocol signed",
+                title: "1997"
+            },
             data: { year: 1997, co2: filteredData.find(d => d.year === 1997)?.co2 },
             dx: 30, dy: -30
         }
     ];
 
+    const parseTime = d3.timeParse("%Y");
+    const timeFormat = d3.timeFormat("%Y");
+
     const makeAnnotations = d3.annotation()
+        .editMode(true)
+        .notePadding(15)
+        .type(type)
+        .accessors({
+            x: d => xScale(parseTime(d.year.toString())),
+            y: d => yScale(d.co2)
+        })
+        .accessorsInverse({
+            year: d => timeFormat(xScale.invert(d.x)),
+            co2: d => yScale.invert(d.y)
+        })
         .annotations(annotations.map(d => ({
             note: d.note,
             x: xScale(new Date(d.data.year, 0, 1)),
