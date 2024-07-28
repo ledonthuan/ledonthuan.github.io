@@ -159,6 +159,10 @@ async function initScatterPlot() {
         population: +d.population
     }));
 
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
     function updateScatterPlot() {
         const year = +document.getElementById("scatterYear").value;
         const yearData = data.filter(d => d.year === year && d.iso_code);
@@ -194,10 +198,6 @@ async function initScatterPlot() {
             });
 
         circles.exit().remove();
-
-        const tooltip = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
     }
 
     // Register event listener for the 'update' event on the scatter plot container
@@ -209,6 +209,7 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
+
 
 
 
