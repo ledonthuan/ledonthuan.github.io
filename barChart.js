@@ -42,16 +42,38 @@ async function initBarChart() {
         .style("font-size", "16px")
         .text("CO₂ Emissions (MtCO₂)");
 
-    const data = await d3.csv("owid-co2-data.csv", d => ({
-        year: +d.year,
-        co2: +d.co2,
-        country: d.country,
-        iso_code: d.iso_code
-    }));
+    const data = await d3.csv("owid-co2-data.csv", d => {
+        return {
+            year: +d.year,
+            co2: +d.co2,
+            coal_co2: +d.coal_co2,
+            oil_co2: +d.oil_co2,
+            gas_co2: +d.gas_co2,
+            cement_co2: +d.cement_co2,
+            flaring_co2: +d.flaring_co2,
+            country: d.country,
+            iso_code: d.iso_code
+        };
+    });
+
+    console.log("Parsed Data: ", data); // Debugging step to ensure data is parsed correctly
+
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px")
+        .style("pointer-events", "none");
 
     function updateBarChart() {
         const year = +document.getElementById("year").value;
         const yearData = data.filter(d => d.year === year && d.iso_code);
+
+        console.log("Filtered Data: ", yearData); // Debugging step to ensure data is filtered correctly
 
         const top15 = yearData.sort((a, b) => b.co2 - a.co2).slice(0, 15);
 
@@ -72,7 +94,27 @@ async function initBarChart() {
             .attr("y", d => yScale(d.co2))
             .attr("width", xScale.bandwidth())
             .attr("height", d => innerHeight - yScale(d.co2))
-            .attr("fill", "steelblue");
+            .attr("fill", "steelblue")
+            .on("mouseover", function(event, d) {
+                console.log("Hovered Data: ", d); // Debugging step to log the data of hovered element
+                d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
+                tooltip.transition().duration(200).style("opacity", .9);
+                tooltip.html(
+                    `Country: ${d.country}<br/>
+                    Total CO₂: ${d.co2} MtCO₂<br/>
+                    Coal CO₂: ${d.coal_co2 || 0} MtCO₂<br/>
+                    Oil CO₂: ${d.oil_co2 || 0} MtCO₂<br/>
+                    Gas CO₂: ${d.gas_co2 || 0} MtCO₂<br/>
+                    Cement CO₂: ${d.cement_co2 || 0} MtCO₂<br/>
+                    Flaring CO₂: ${d.flaring_co2 || 0} MtCO₂`
+                )
+                .style("left", (event.pageX + 5) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+                d3.select(this).attr("stroke", null);
+                tooltip.transition().duration(500).style("opacity", 0);
+            });
 
         bars.attr("x", d => xScale(d.country))
             .attr("y", d => yScale(d.co2))
@@ -88,3 +130,4 @@ async function initBarChart() {
 }
 
 initBarChart();
+
