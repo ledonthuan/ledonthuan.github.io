@@ -104,6 +104,7 @@
 // // Ensure initScatterPlot is called when needed
 // document.addEventListener('DOMContentLoaded', initScatterPlot);
 
+
 async function initScatterPlot() {
     const svg = d3.select("#scatterPlot svg");
     const width = +svg.attr("width") || 800;
@@ -209,4 +210,5 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
+
 
