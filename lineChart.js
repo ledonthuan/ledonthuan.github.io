@@ -190,7 +190,7 @@ async function updateLineChart() {
         .attr("x", margin.left + innerWidth / 2)
         .attr("y", margin.top / 2)
         .attr("font-size", "24px")
-        .text("CO₂ Emissions Over Time");
+        .text("CO₂ Emissions Over Time changed");
 
     // Define annotations
     const annotations = [
