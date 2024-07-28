@@ -209,7 +209,7 @@ async function updateLineChart() {
                 title: "1945"
             },
             data: { year: 1945, co2: filteredData.find(d => d.year === 1945)?.co2 },
-            dy: 30,
+            dy: -30,
             dx: -30
         },
         {
@@ -218,7 +218,7 @@ async function updateLineChart() {
                 title: "1997"
             },
             data: { year: 1997, co2: filteredData.find(d => d.year === 1997)?.co2 },
-            dy: 30,
+            dy: -30,
             dx: -30
         }
     ];
