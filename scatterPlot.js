@@ -104,6 +104,7 @@
 // // Ensure initScatterPlot is called when needed
 // document.addEventListener('DOMContentLoaded', initScatterPlot);
 
+
 async function initScatterPlot() {
     const svg = d3.select("#scatterPlot svg");
     const width = +svg.attr("width") || 800;
@@ -159,13 +160,13 @@ async function initScatterPlot() {
         population: +d.population
     }));
 
-    console.log("Parsed data:", data);
+    // Initialize tooltip
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip");
 
     function updateScatterPlot() {
         const year = +document.getElementById("scatterYear").value;
         const yearData = data.filter(d => d.year === year && d.iso_code);
-
-        console.log("Year data:", yearData);
 
         xScale.domain([0, d3.max(yearData, d => d.gdp)]).nice();
         yScale.domain([0, d3.max(yearData, d => d.co2)]).nice();
@@ -187,9 +188,8 @@ async function initScatterPlot() {
             .attr("opacity", 0.7)
             .on("mouseover", function(event, d) {
                 d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
-                console.log("Hover data:", d);  // Log the hovered data point
                 tooltip.transition().duration(200).style("opacity", .9);
-                tooltip.html("Country: " + d.country + "<br/>CO₂: " + d.co2 + "<br/>GDP: " + d.gdp + "<br/>Population: " + d.population)
+                tooltip.html(`Country: ${d.country}<br/>CO₂: ${d3.format(",")(d.co2)}<br/>GDP: ${d3.format(",")(d.gdp)}<br/>Population: ${d3.format(",")(d.population)}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
@@ -199,10 +199,6 @@ async function initScatterPlot() {
             });
 
         circles.exit().remove();
-
-        const tooltip = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
     }
 
     // Register event listener for the 'update' event on the scatter plot container
@@ -214,7 +210,6 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
-
 
 
 
