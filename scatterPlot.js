@@ -189,7 +189,7 @@ async function initScatterPlot() {
             .attr("opacity", 0.7)
             .on("mouseover", function(event, d) {
                 // Log data to see if properties are defined
-                console.log("Hovered Data:", d);
+                console.log("Hovered Data:", d.country);
                 d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
                 tooltip.transition().duration(200).style("opacity", .9);
                 tooltip.html(`Country: ${d.country}<br/>CO₂: ${d.co2}<br/>GDP: ${d.gdp}<br/>Population: ${d.population}`)
