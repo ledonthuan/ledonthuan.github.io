@@ -150,24 +150,22 @@ async function initScatterPlot() {
         .style("font-size", "16px")
         .text("CO₂ Emissions (MtCO₂)");
 
-    // Load and parse the data
-    const data = await d3.csv("owid-co2-data.csv", d => {
-        return {
-            year: +d.year,
-            co2: +d.co2,
-            gdp: +d.gdp,
-            country: d.country,
-            iso_code: d.iso_code,
-            population: +d.population
-        };
-    });
+    const data = await d3.csv("owid-co2-data.csv", d => ({
+        year: +d.year,
+        co2: +d.co2,
+        gdp: +d.gdp,
+        country: d.country,
+        iso_code: d.iso_code,
+        population: +d.population
+    }));
+
+    console.log("Parsed data:", data);
 
     function updateScatterPlot() {
         const year = +document.getElementById("scatterYear").value;
         const yearData = data.filter(d => d.year === year && d.iso_code);
 
-        // Check if the data is correctly filtered and parsed
-        console.log("Year Data:", yearData);
+        console.log("Year data:", yearData);
 
         xScale.domain([0, d3.max(yearData, d => d.gdp)]).nice();
         yScale.domain([0, d3.max(yearData, d => d.co2)]).nice();
@@ -188,9 +186,8 @@ async function initScatterPlot() {
             .attr("fill", d => colorScale(d.country))
             .attr("opacity", 0.7)
             .on("mouseover", function(event, d) {
-                // Log data to see if properties are defined
-                console.log("Hovered Data:", d.country);
                 d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
+                console.log("Hover data:", d);  // Log the hovered data point
                 tooltip.transition().duration(200).style("opacity", .9);
                 tooltip.html(`Country: ${d.country}<br/>CO₂: ${d.co2}<br/>GDP: ${d.gdp}<br/>Population: ${d.population}`)
                     .style("left", (event.pageX + 5) + "px")
@@ -217,5 +214,6 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
+
 
 
