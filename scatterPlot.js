@@ -160,6 +160,7 @@ async function initScatterPlot() {
         population: +d.population
     }));
 
+    // Define the tooltip
     const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
@@ -189,7 +190,7 @@ async function initScatterPlot() {
             .on("mouseover", function(event, d) {
                 d3.select(this).attr("stroke", "black").attr("stroke-width", 2);
                 tooltip.transition().duration(200).style("opacity", .9);
-                tooltip.html(`Country: ${d.country}<br/>CO₂: ${d.co2}<br/>GDP: ${d.gdp}<br/>Population: ${d.population}`)
+                tooltip.html(`Country: ${d.country}<br/>CO₂: ${d.co2} MtCO₂<br/>GDP: ${d.gdp}<br/>Population: ${d.population}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
@@ -210,5 +211,6 @@ async function initScatterPlot() {
 
 // Ensure initScatterPlot is called when needed
 document.addEventListener('DOMContentLoaded', initScatterPlot);
+
 
 
